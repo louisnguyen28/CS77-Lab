@@ -178,16 +178,16 @@ def main():
         if valueType == "D":
         #The Decimal -> BHO flow goes here. We want to use Dec to Hex then the other functions(?). Hex to Bin. Bin to Oct using a map(?). Try to reuse functions
             hex = decToHex(value)
-            print(hex)
+            print("Hexadecimal number: " + hex)
             bin = decToBin(hex)
-            print(bin)
+            print("Binary number: " + bin)
             oct = binToOct(bin)
-            print(oct)
+            print("Octal number: " + oct)
         else:
         #The Binary -> DHO flow goes here
-            print(binToDec(value))
-            print(binToHex(value))
-            print(binToOct(value))
+            print("Decimal number: " + binToDec(value))
+            print("Hexadecimal number: " + binToHex(value))
+            print("Octal number: " + binToOct(value))
         
         #Ask for a loop
         repeat = input("Do you want to continue? Y/N: ").upper()
