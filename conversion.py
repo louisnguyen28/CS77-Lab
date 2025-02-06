@@ -120,14 +120,21 @@ def decToBin(value: str)-> str:
         result += HEXBINTABLE.get(i)
     return removeLeadAndTrailZeroes(result)
 
-
-    
 def binToDec(value: str)-> str:
-    pass
+    binInteger, binFraction = value.split(".")
+    result = 0
+    base = 1
+    for c in binInteger[::-1]:
+        result = result + base * int(c)
+        base = base * 2
+    base = 2
+    for c in binFraction:
+        result = result + int(c) / base
+        base = base * 2
+    return str(result)
 
 def binToHex(value: str)-> str:
-    #Translate Hex/Bin table
-    pass
+    return decToHex(binToDec(value))
 
 def zeroesToAdd(value: int, power: int)-> int:
     return value*(power-1)%power
