@@ -73,12 +73,14 @@ def useHexTable(value: int, HEXVALUE):
 
 #Function for removing unsignificant figures
 def removeLeadAndTrailZeroes(value: str)->str:
-    return value.strip("0")    
+    value = float(value)
+    return str(value).rstrip("0")    
 
 #Convert the integer part of the floating point number into hexadecimal
 def dexToHexInteger(value: str)-> str:
     HEXVALUE = 16
     quotient = int(value)
+    if quotient == 0: return "0"
     remainder = ""
     while quotient != 0:
         remainder = useHexTable(quotient, HEXVALUE) + remainder
