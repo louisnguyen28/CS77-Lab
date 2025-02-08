@@ -4,6 +4,7 @@
     
 """
 
+#Checking valid input
 def isValid(value: str, type: str):
     
     
@@ -61,6 +62,7 @@ BINOCTTABLE = {
     '111':'7'
 }
 
+#A helper function for mapping the remainder to DECHEXTABLE
 def useHexTable(value: int, HEXVALUE):
     #idk why i worded it like this
     result = value%HEXVALUE
@@ -69,9 +71,11 @@ def useHexTable(value: int, HEXVALUE):
     else:
         return str(result)
 
+#Function for removing unsignificant figures
 def removeLeadAndTrailZeroes(value: str)->str:
     return value.strip("0")    
 
+#Convert the integer part of the floating point number into hexadecimal
 def dexToHexInteger(value: str)-> str:
     HEXVALUE = 16
     quotient = int(value)
@@ -81,7 +85,7 @@ def dexToHexInteger(value: str)-> str:
         quotient//=HEXVALUE
     return remainder
     
- 
+#Convert the fractional part of the floating point number into hexadecimal
 def dexToHexFractional(value: str)-> str:
      #need to convert to decimal as it enters as just a string of numbers
      #I am going to decide to use precision to 4 numbers
@@ -93,21 +97,20 @@ def dexToHexFractional(value: str)-> str:
         sep += useHexTable((int(result//1)), HEXVALUE)
         value = result - result//1
     return str(sep)
- 
+
+#Convert the fractional part of the floating point number into integer number
 def toFraction(value: str)-> int:
     length = len(value)*-1
     value = (int(value)*pow(10, length))
     return value
      
-    
 def decToHex(value: str)-> str:
     #Seperate based on "."
     integerValue, fractionalValue = value.split(".")
     result = dexToHexInteger(integerValue) + "." + dexToHexFractional(fractionalValue)
     return result
     
-  
-def decToBin(value: str)-> str:
+def hexToBin(value: str)-> str:
     #Assuming unsigned numbers. We can add sign functionality later might be good to add a subroutine to convert to hex then to binary using a hashmap
     #We already have the hex representation, just split and use a map(?)
     integerAsHex, fractionalAsHex = value.split(".")
@@ -136,6 +139,7 @@ def binToDec(value: str)-> str:
 def binToHex(value: str)-> str:
     return decToHex(binToDec(value))
 
+#Determine how many figures should be added in order to make the length of string a multiple of 3
 def zeroesToAdd(value: int, power: int)-> int:
     return value*(power-1)%power
 
@@ -186,7 +190,7 @@ def main():
         #The Decimal -> BHO flow goes here. We want to use Dec to Hex then the other functions(?). Hex to Bin. Bin to Oct using a map(?). Try to reuse functions
             hex = decToHex(value)
             print("Hexadecimal number: " + hex)
-            bin = decToBin(hex)
+            bin = hexToBin(hex)
             print("Binary number: " + bin)
             oct = binToOct(bin)
             print("Octal number: " + oct)
@@ -200,7 +204,6 @@ def main():
         repeat = input("Do you want to continue? Y/N: ").upper()
         if repeat == "N":
             break
-
 
 main()
     
