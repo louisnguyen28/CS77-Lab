@@ -1,5 +1,5 @@
 """CS-77 Spring Lab 1
-    Group 6 members: Louis Nguyen, Thuan Thanh Lam, Ian Ramin
+    Group 6 members: Louis Nguyen, Thuan Thanh Lam
     The purpose of this program is to take an value(String) in the format of either Binary or Decimal(specified), value check, and then translate it to the other 3 formats
     
 """
@@ -73,7 +73,11 @@ def useHexTable(value: int, HEXVALUE):
 
 #Function for removing unsignificant figures
 def removeLeadAndTrailZeroes(value: str)->str:
-    value = float(value)
+    periods = value.rstrip("0")
+    if value[0] == '.':
+        return '0' + value.rstrip("0")
+    elif periods[-1] == '.':
+        return periods + "0000"
     return str(value).rstrip("0")    
 
 #Convert the integer part of the floating point number into hexadecimal
