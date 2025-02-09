@@ -64,7 +64,7 @@ BINOCTTABLE = {
 
 #A helper function for mapping the remainder to DECHEXTABLE
 def useHexTable(value: int, HEXVALUE):
-    #idk why i worded it like this
+    #Calculate the remainder
     result = value%HEXVALUE
     if result > 9:
         return DECHEXTABLE.get(str(result))
@@ -82,6 +82,7 @@ def dexToHexInteger(value: str)-> str:
     quotient = int(value)
     if quotient == 0: return "0"
     remainder = ""
+    #Iterating until it reaches the base case when quotient = 0 and converting the number
     while quotient != 0:
         remainder = useHexTable(quotient, HEXVALUE) + remainder
         quotient//=HEXVALUE
@@ -105,19 +106,22 @@ def toFraction(value: str)-> int:
     length = len(value)*-1
     value = (int(value)*pow(10, length))
     return value
-     
+
+#Convert decimal number to hexadecimal number
 def decToHex(value: str)-> str:
     #Seperate based on "."
     integerValue, fractionalValue = value.split(".")
     result = dexToHexInteger(integerValue) + "." + dexToHexFractional(fractionalValue)
     return result
-    
+
+#Convert hexadecimal number to binary number
 def hexToBin(value: str)-> str:
     #Assuming unsigned numbers. We can add sign functionality later might be good to add a subroutine to convert to hex then to binary using a hashmap
     #We already have the hex representation, just split and use a map(?)
     integerAsHex, fractionalAsHex = value.split(".")
     
     result = ""
+    #Loop through 2 strings and map the value of the character with the preset table
     for i in integerAsHex:
         result += HEXBINTABLE.get(i)
     result += "."
@@ -125,10 +129,12 @@ def hexToBin(value: str)-> str:
         result += HEXBINTABLE.get(i)
     return removeLeadAndTrailZeroes(result)
 
+#Convert binary number to decimal
 def binToDec(value: str)-> str:
     binInteger, binFraction = value.split(".")
     result = 0
     base = 1
+    #Loop through 2 strings to calculate the decimal number
     for c in binInteger[::-1]:
         result = result + base * int(c)
         base = base * 2
@@ -138,6 +144,7 @@ def binToDec(value: str)-> str:
         base = base * 2
     return str(result)
 
+#Convert binary number to hexadecimal
 def binToHex(value: str)-> str:
     return decToHex(binToDec(value))
 
@@ -145,6 +152,7 @@ def binToHex(value: str)-> str:
 def zeroesToAdd(value: int, power: int)-> int:
     return value*(power-1)%power
 
+#Convert binary number to octal number
 def binToOct(value: str)-> str:
     #Translate Oct/Bin table
     #How do i get it to be the right size? 
@@ -208,4 +216,3 @@ def main():
             break
 
 main()
-    
