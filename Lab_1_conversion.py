@@ -77,8 +77,8 @@ def removeLeadAndTrailZeroes(value: str)->str:
     if value[0] == '.':
         return '0' + value.rstrip("0")
     elif periods[-1] == '.':
-        return periods + "0000"
-    return str(value).rstrip("0")    
+        return periods.strip("0")  + "0000"
+    return str(value).strip("0")    
 
 #Convert the integer part of the floating point number into hexadecimal
 def dexToHexInteger(value: str)-> str:
@@ -219,4 +219,5 @@ def main():
         if repeat == "N":
             break
 
-main()
+if __name__ == "__main__":
+    main()
