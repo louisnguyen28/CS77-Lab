@@ -49,20 +49,46 @@ def getExponent(binary: str)-> str:
     return exponentBin
         
 def sizeCheckAndCorrect(bin: str, size: int):
+    #This below code works for values > 15. We need handling for values <15
+    if len(bin)<size:
+        bin += "0"*(size-len(bin)) 
+    return bin
+
+def decimalSizeCheckAndCorrect(bin: str, size: int):
     if len(bin)<size:
         bin = "0"*(size-len(bin)) + bin
     return bin
+
+def isLessThan1(value):
+    #What does a number less than 1/-1 look like? It would be 0.xxxx
+    #This function will aim to add a flag for decimal values. I expect inputs to be 0.xxx or -0.xxx and not .xxx.
+    value = value.split(".")
+    if len(value[0].strip("0").replace("-","")) == 0:
+        return True
+    else:
+        return False
     
+def formattedValue(value):
+    return "0" + value.lstrip("0")
+    
+def decimalHandling(value):
+    #How many 0s do we have? We want to compare the leading 0s so use lstrip
+    #value = value.split(".")[1]
+    zeroesRemoved = len(value) - len(value.lstrip("0")) + 1
+    return zeroesRemoved
+        
 def toSimple(value, sign):
-    if sign == '0':
+    #Think about refactoring this using DRY
+    valueIsLessThan1 = isLessThan1(value)
+    if sign == '0' and not valueIsLessThan1:
         #POSITIVE WORKFLOW
         bin = toBin(value)
-        exponentBin = getExponent(bin).replace(".", "")
+        exponentBin = getExponent(bin).rstrip("0")
         bin = bin.rstrip("0").replace(".", "")
-        exponentBin = exponentBin.rstrip("0")
+        exponentBin = exponentBin.replace(".", "")
         exponentBin = sizeCheckAndCorrect(exponentBin, 5)
         bin = sizeCheckAndCorrect(bin, 8)
-    elif sign == '1':
+    elif sign == '1' and not valueIsLessThan1:
         value = value[1:]
         bin = toBin(value)
         exponentBin = getExponent(bin).replace(".", "")
@@ -70,6 +96,22 @@ def toSimple(value, sign):
         exponentBin = exponentBin.rstrip("0")
         exponentBin = sizeCheckAndCorrect(exponentBin, 5)
         bin = sizeCheckAndCorrect(bin, 8)
+    #TODO: ADD HANDLING FOR DECIMAL NUMBERS LIKE 0.0625
+    #I changed up how i got the exponent value and now need to rethink this method
+    #uggy
+    elif sign == '0' and valueIsLessThan1:
+        exponent = decimalHandling(value)*-1 + BIAS
+        exponentBin = toBin(str(exponent) + ".0").rstrip("0").replace(".", "")
+        exponentBin = decimalSizeCheckAndCorrect(exponentBin, 5)
+        bin = toBin(formattedValue(value)).replace(".", "").lstrip("0")
+        bin = sizeCheckAndCorrect(bin, 8)
+    elif sign =='1' and valueIsLessThan1:
+        exponent = decimalHandling(value)*-1 + BIAS
+        exponentBin = toBin(str(exponent)+ ".0").rstrip("0").replace(".", "")
+        exponentBin = decimalSizeCheckAndCorrect(exponentBin, 5)
+        bin = toBin(formattedValue(value)).replace(".", "")
+        bin = sizeCheckAndCorrect(bin, 8)
+        
         
     #CHANGE THE RETURN TO MAKE SENSE LATER
     print( sign + " is the sign bit " + exponentBin.replace(".","") +" is the exponent " + bin[0:8].replace(".", "") + " is the mantessa.")
