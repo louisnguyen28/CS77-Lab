@@ -42,14 +42,22 @@ def toBin(value: str) -> int:
 def countExponent(binary: str)-> int:
     return binary.index('.')+BIAS
 
+def decimalExponents(binary: str) -> int:
+    hold = (len(binary) - len(binary.replace(".", "").lstrip("0")))*-1
+    return hold + BIAS +1
+
 def getExponent(binary: str)-> str:
     exponent = str(countExponent(binary)) + '.0'
     exponentBin = toBin(exponent)
     #print(exponentBin)
     return exponentBin
+
+def getDecimalExponent(binary: str)-> str:
+    exponent = str(decimalExponents(binary)) + ".0"
+    return toBin(exponent)
         
 def sizeCheckAndCorrect(bin: str, size: int):
-    #This below code works for values > 15. We need handling for values <15
+    #This below code works for values > 15. We need handling for values <15 which only appears when values are decimal
     if len(bin)<size:
         bin += "0"*(size-len(bin)) 
     return bin
@@ -100,16 +108,26 @@ def toSimple(value, sign):
     #I changed up how i got the exponent value and now need to rethink this method
     #uggy
     elif sign == '0' and valueIsLessThan1:
-        exponent = decimalHandling(value)*-1 + BIAS
-        exponentBin = toBin(str(exponent) + ".0").rstrip("0").replace(".", "")
+        #exponent = decimalHandling(value)*-1 + BIAS
+        #exponentBin = toBin(str(exponent) + ".0").rstrip("0").replace(".", "")
+        #exponentBin = decimalSizeCheckAndCorrect(exponentBin, 5)
+        bin = toBin(value)
+        exponentBin = getDecimalExponent(bin)
+        exponentBin = exponentBin.rstrip("0")
+        exponentBin = exponentBin.replace(".","")
         exponentBin = decimalSizeCheckAndCorrect(exponentBin, 5)
-        bin = toBin(formattedValue(value)).replace(".", "").lstrip("0")
+        #bin = toBin(formattedValue(value)).replace(".", "").lstrip("0")
+        bin = bin.replace('.', "").lstrip("0")
         bin = sizeCheckAndCorrect(bin, 8)
     elif sign =='1' and valueIsLessThan1:
-        exponent = decimalHandling(value)*-1 + BIAS
-        exponentBin = toBin(str(exponent)+ ".0").rstrip("0").replace(".", "")
+        value = value[1:]
+        bin = toBin(value)
+        exponentBin = getDecimalExponent(bin)
+        exponentBin = exponentBin.rstrip("0")
+        exponentBin = exponentBin.replace(".","")
         exponentBin = decimalSizeCheckAndCorrect(exponentBin, 5)
-        bin = toBin(formattedValue(value)).replace(".", "")
+        #bin = toBin(formattedValue(value)).replace(".", "").lstrip("0")
+        bin = bin.replace('.', "").lstrip("0")
         bin = sizeCheckAndCorrect(bin, 8)
         
         
